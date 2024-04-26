@@ -1,9 +1,13 @@
+import { useLoaderData } from "react-router-dom";
 
 
 const UpdateCoffe = () => {
+
+    const coffee = useLoaderData();
+
     return (
         <div>
-            This is update Coffee Page
+            <h1>Name of the Coffee : {coffee.name}</h1>
         </div>
     );
 };
