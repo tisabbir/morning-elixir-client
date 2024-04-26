@@ -1,12 +1,41 @@
 import { Link } from "react-router-dom";
+import useAuth from "../Hooks/useAuth";
 
 const Register = () => {
+
+  const {createUserWithEmail} = useAuth();
+
   const handleRegister = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
     console.log(name, email, password);
+    createUserWithEmail(email, password)
+    .then(res => {
+      console.log('user created ',res.user)
+      //new user has been created...
+      const creationTime = res?.user?.metadata?.creationTime;
+
+      const user = {name, email, password, creationTime};
+      fetch('http://localhost:5000/users/', {
+        method:"POST",
+        headers:{
+          'content-type':"application/json"
+        },
+        body: JSON.stringify(user)
+      })
+      .then(res => res.json())
+      .then(data=>{
+        console.log('user registered',data);
+        if(data.insertedId){
+          alert('User added in the data base')
+        }
+      })
+    })
+    .catch(err=>{
+      console.log(err);
+    })
   };
   return (
     <div className="hero min-h-screen bg-base-200">

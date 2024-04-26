@@ -1,11 +1,42 @@
 import { Link } from "react-router-dom";
+import useAuth from "../Hooks/useAuth";
+import { data } from "autoprefixer";
 
 const Login = () => {
+  const {signInWithEmail} = useAuth()
   const handleLogin = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
     console.log(email, password);
+    signInWithEmail(email, password)
+    .then(result => {
+    console.log(result.user);
+
+    const user = {
+      email,
+      lastLoggedAt : result?.user?.metadata?.lastSignInTime,
+    }
+
+    // update last logged at  in the database
+    fetch('http://localhost:5000/users/', {
+      method:"PATCH",
+      headers:{
+        'content-type' : "application/json"
+      },
+      body: JSON.stringify(user)
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+    })
+
+    })
+    .catch(err => {
+      console.log(err);
+    })
+
+
   };
   return (
     <div className="hero min-h-screen bg-base-200">

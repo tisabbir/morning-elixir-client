@@ -9,6 +9,8 @@ import Home from "./Layouts/Home";
 import Root from "./routes/Root";
 import AddCoffee from "./Components/AddCoffee";
 import UpdateCoffe from "./Components/UpdateCoffe";
+import AuthProvider from "./Providers/AuthProvider";
+import Users from "./Components/Users";
 
 const router = createBrowserRouter([
   {
@@ -38,12 +40,19 @@ const router = createBrowserRouter([
         element: <UpdateCoffe />,
         loader: ({params}) =>fetch(`http://localhost:5000/coffee/${params.id}`)
       },
+      {
+        path: "/users",
+        element: <Users />,
+        loader: ()=>fetch('http://localhost:5000/users')
+      },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+    <AuthProvider>
     <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );
