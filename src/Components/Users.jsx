@@ -15,7 +15,6 @@ const Users = () => {
         .then(data => {
             console.log(data);
             if(data.deletedCount>0){
-                alert('User Deleted')
             const remaining = users.filter(user => user._id !== _id);
             setUsers(remaining)
             }
