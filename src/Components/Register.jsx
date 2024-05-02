@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
+import axios from "axios";
 
 const Register = () => {
 
@@ -18,23 +19,33 @@ const Register = () => {
       const creationTime = res?.user?.metadata?.creationTime;
 
       const user = {name, email, password, creationTime};
-      fetch('http://localhost:5000/users/', {
-        method:"POST",
-        headers:{
-          'content-type':"application/json"
-        },
-        body: JSON.stringify(user)
-      })
-      .then(res => res.json())
-      .then(data=>{
-        console.log('user registered',data);
-        if(data.insertedId){
-          alert('User added in the data base')
+      //using axios data post
+      axios.post('http://localhost:5000/users/', user)
+      .then(data => {
+        if(data.data.insertedId){
+          console.log('Data added to the userDB',data.data);
         }
       })
-    })
-    .catch(err=>{
-      console.log(err);
+
+
+      // using fetch
+    //   fetch('http://localhost:5000/users/', {
+    //     method:"POST",
+    //     headers:{
+    //       'content-type':"application/json"
+    //     },
+    //     body: JSON.stringify(user)
+    //   })
+    //   .then(res => res.json())
+    //   .then(data=>{
+    //     console.log('user registered',data);
+    //     if(data.insertedId){
+    //       alert('User added in the data base')
+    //     }
+    //   })
+    // })
+    // .catch(err=>{
+    //   console.log(err);
     })
   };
   return (
